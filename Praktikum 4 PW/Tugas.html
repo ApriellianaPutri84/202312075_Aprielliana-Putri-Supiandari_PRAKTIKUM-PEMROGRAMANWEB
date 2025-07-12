@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Toko Elektronik Cepat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f8ff;
+        }
+        .slideshow img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border: 3px solid #007bff;
+            border-radius: 10px;
+        }
+        .product-item {
+            cursor: pointer;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #007bff;
+            transition: 0.3s;
+        }
+        .product-item:hover {
+            background-color: #e0f0ff;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            border-left: 5px solid #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body class="container py-4">
+    <h1 class="text-center text-primary">Toko Elektronik Cepat</h1>
+    <p class="text-center" id="waktu"></p>
+
+    <div class="row">
+        <!-- Display Produk Utama -->
+        <div class="col-md-8">
+            <div class="slideshow mb-3">
+                <img id="gambar-produk" src="" alt="Gambar Produk">
+                <div class="mt-2">
+                    <button class="btn btn-primary btn-sm" onclick="gantiGambar(-1)">Previous</button>
+                    <button class="btn btn-primary btn-sm" onclick="gantiGambar(1)">Next</button>
+                </div>
+            </div>
+            <h4 id="nama-produk" class="text-primary"></h4>
+            <p id="harga-produk" class="fw-bold"></p>
+
+            <!-- Form Pemesanan -->
+            <form onsubmit="return prosesPesanan()" class="mt-4">
+                <h5 class="text-primary">Form Pemesanan</h5>
+                <div class="mb-2">
+                    <label for="nama" class="form-label">Nama Pemesan</label>
+                    <input type="text" class="form-control" id="nama">
+                </div>
+                <div class="mb-2">
+                    <label for="jumlah" class="form-label">Jumlah Pesan</label>
+                    <input type="number" class="form-control" id="jumlah">
+                </div>
+                <div class="mb-2">
+                    <label for="promo" class="form-label">Kode Promo</label>
+                    <input type="text" class="form-control" id="promo">
+                </div>
+                <button type="submit" class="btn btn-primary">Pesan Sekarang</button>
+            </form>
+            <div class="output" id="output"></div>
+        </div>
+
+        <!-- Daftar Produk -->
+        <div class="col-md-4">
+            <h5 class="text-primary">Daftar Produk</h5>
+            <div id="daftar-produk" class="list-group"></div>
+        </div>
+    </div>
+
+<script>
+setInterval(() => {
+    const waktu = new Date();
+    document.getElementById("waktu").innerText = 
+        waktu.toLocaleDateString() + " " + waktu.toLocaleTimeString();
+}, 1000);
+
+const produk = [
+    {
+        nama: "Laptop MSI Katana 15 b13v",
+        harga: 16000000,
+        gambar: [
+            "https://asset.msi.com/resize/image/global/product/product_1668147471bfb422e68c23700dc0a8ce78ffb25e6d.png62405b38c58fe0f07fcef2367d8a9ba1/600.png",
+            "https://storage-asset.msi.com/global/picture/image/feature/nb/GF/Katana-15-A13V/photo15-1.png"
+        ]
+    },
+    {
+        nama: "Smartphone Google Pixel 9 XL",
+        harga: 32000000,
+        gambar: [
+            "https://asset-2.tstatic.net/tribunnews/foto/bank/images/google-pixel-9-6575u5.jpg",
+            "https://ik.imagekit.io/inponsel/images/galeri/InPonsel-Google-_Pixel_9_Pro_XL_.550x550-_01_h-2aN0NvD.jpg"
+        ]
+    },
+    {
+        nama: "Headset Wireless JBL",
+        harga: 750000,
+        gambar: [
+            "https://id.jbl.com/dw/image/v2/AAUJ_PRD/on/demandware.static/-/Sites-siteCatalog_JB_APAC_NCOM/default/dwf0299e91/navigation/V700BT_377.png?sw=377",
+            "https://id.jbl.com/dw/image/v2/AAUJ_PRD/on/demandware.static/-/Sites-siteCatalog_JB_APAC_NCOM/default/dw5279e611/navigation/flyout/JBL_LIVE650BTNC_Product-Image_Hero_White_069_x1-1605x1605px.png?sw=286"
+        ]
+    }
+];
+
+let indexProduk = 0;
+let indexGambar = 0;
+
+function tampilkanProduk(index) {
+    indexProduk = index;
+    indexGambar = 0;
+    const p = produk[indexProduk];
+    document.getElementById("gambar-produk").src = p.gambar[indexGambar];
+    document.getElementById("nama-produk").innerText = p.nama;
+    document.getElementById("harga-produk").innerText = "Rp " + p.harga.toLocaleString();
+}
+
+function gantiGambar(arah) {
+    const gambarList = produk[indexProduk].gambar;
+    indexGambar = (indexGambar + arah + gambarList.length) % gambarList.length;
+    document.getElementById("gambar-produk").src = gambarList[indexGambar];
+}
+
+function tampilkanDaftarProduk() {
+    const daftar = document.getElementById("daftar-produk");
+    for (let i = 0; i < produk.length; i++) {
+        const item = document.createElement("button");
+        item.className = "list-group-item list-group-item-action border-primary";
+        item.innerText = produk[i].nama;
+        item.onclick = () => tampilkanProduk(i);
+        daftar.appendChild(item);
+    }
+}
+
+function prosesPesanan() {
+    const nama = document.getElementById("nama").value.trim();
+    const jumlah = parseInt(document.getElementById("jumlah").value);
+    const kode = document.getElementById("promo").value.trim().toUpperCase();
+
+    if (nama === "" || isNaN(jumlah) || jumlah <= 0) {
+        alert("Nama dan jumlah tidak boleh kosong. Jumlah harus lebih dari 0.");
+        return false;
+    }
+
+    const produkAktif = produk[indexProduk];
+    const harga = produkAktif.harga;
+    const subtotal = harga * jumlah;
+
+    let potongan = 0;
+    if (kode === "DISKON10") {
+        potongan = subtotal * 0.10;
+    }
+
+    const total = subtotal - potongan;
+    const orderID = "INV-" + Math.floor(10000 + Math.random() * 90000);
+
+    const output = `
+        <h5 class="text-primary">Struk Pemesanan</h5>
+        <p><b>Order ID:</b> ${orderID}</p>
+        <p><b>Nama:</b> ${nama}</p>
+        <p><b>Produk:</b> ${produkAktif.nama}</p>
+        <p><b>Jumlah:</b> ${jumlah}</p>
+        <p><b>Subtotal:</b> Rp ${subtotal.toLocaleString()}</p>
+        <p><b>Potongan:</b> Rp ${potongan.toLocaleString()}</p>
+        <p><b>Total Akhir:</b> Rp ${total.toLocaleString()}</p>
+    `;
+    document.getElementById("output").innerHTML = output;
+    return false;
+}
+
+tampilkanProduk(0);
+tampilkanDaftarProduk();
+</script>
+</body>
+</html>

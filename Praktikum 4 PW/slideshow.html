@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>Image Slideshow</title></head>
+<body>
+<h2>Galeri Gambar</h2>
+<img id="slideshow-image" src="" alt="Slideshow" width="500">
+<br>
+<button onclick="gantiGambar(-1)">Previous</button>
+<button onclick="gantiGambar(1)">Next</button>
+<script>
+var gambar = [
+    "https://img.pikbest.com/illustration/20241204/a-drawing-of-a-butterfly-with-the-word-on-it_11205167.jpg!w700wp",
+    "https://i.pinimg.com/736x/60/af/e7/60afe75e94b192879557f44c66699c46.jpg",
+    "https://img.pikbest.com/backgrounds/20250412/intricate-butterfly-sketches--e2-80-93-vector-insect-graphics_11660828.jpg!w700wp"
+];
+var indexGambar = 0;
+var imageElement = document.getElementById("slideshow-image");
+function tampilkanGambar() {
+    imageElement.src = gambar[indexGambar];
+}
+
+function gantiGambar(arah) {
+    indexGambar += arah;
+    // Jika sudah gambar terakhir, kembali ke awal
+    if (indexGambar >= gambar.length) {
+        indexGambar = 0;
+    }
+    // Jika sudah gambar pertama dan menekan previous, pergi ke akhir
+    if (indexGambar < 0) {
+        indexGambar = gambar.length - 1; }
+    tampilkanGambar();
+}
+// Tampilkan gambar pertama saat halaman dimuat
+tampilkanGambar();
+</script>
+</body>
+</html>
